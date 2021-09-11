@@ -1,0 +1,126 @@
+#wireguard last
+#https://github.com/WireGuard
+
+apt install wget wireguard resolvconf qrencode
+
+#wireguard同时监听IPv4和IPV6同一端口，只需切换客户端配置文件的IP地址（域名）即可切换IPv4和IPv6隧道,同一配置文件的IPv4和IPv6视为同一客户端，同时连接互相干扰
+#51820端口被封的概率非常大
+#上传配置文件 /etc/wireguard/
+scp wg0.conf root@ipv6.wower.cool:/etc/wireguard/wg0.conf
+###########################################################################################
+#ikev2已经配置过
+vi /etc/sysctl.conf
+
+net.ipv4.ip_forward = 1
+
+sysctl -p
+
+sysctl -w net.ipv4.ip_forward=1
+
+#开启 IPv6 的转发功能（设置为1，GCP会失去连接,无法转发IPv6数据包）
+#设置all,default同时也会自动设置（单独设置default并不能实现IPv6转发）
+sysctl -w net.ipv6.conf.all.forwarding=1
+sysctl -w net.ipv6.conf.default.forwarding=1
+
+
+#显示过滤策略
+iptables -t filter -L FORWARD
+ip6tables -t filter -L FORWARD
+GCP默认值为ACCEPT，如果policy为DROP，需要允许wg0 接口
+iptables -t filter -A FORWARD -i wg0 -j ACCEPT
+iptables -t filter -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+ip6tables -t filter -A FORWARD -i wg0 -j ACCEPT
+ip6tables -t filter -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+#可以在wg0.conf中单独设置NAT
+PostUp = iptables -t nat -A POSTROUTING -o ens4 -j MASQUERADE; ip6tables -t nat -A POSTROUTING -o ens4 -j MASQUERADE
+PostDown = iptables -t nat -D POSTROUTING -o ens4 -j MASQUERADE; ip6tables -t nat -D POSTROUTING -o ens4 -j MASQUERADE
+
+#防火墙设置NAT
+iptables -t nat -A POSTROUTING -o ens4 -j MASQUERADE
+ip6tables -t nat -A POSTROUTING -o ens4 -j MASQUERADE
+
+#检查nat表的POSTROUTING链是否已经做了出口的NAT（GCP貌似只能转发IPv4数据包）
+iptables -t nat -L POSTROUTING -v
+ip6tables -t nat -L POSTROUTING -v
+
+
+iptables-save >> /etc/iptables.rules
+iptables-restore < /etc/iptables.rules
+ip6tables-save >> /etc/ip6tables.rules
+ip6tables-restore < /etc/ip6tables.rules
+vi /etc/iptables.rules
+vi /etc/ip6tables.rules
+
+ip -6 route
+ip -6 r
+ip -6 address
+ip -6 a
+
+ip route
+ip r
+ip address
+ip a
+
+iptables -L
+ip6tables -L
+###########################################################################################
+#iptables ikev2已经配置过，不需要配置
+vi /etc/systemd/system/wg-iptables.service
+
+[Unit]
+Before=network.target
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/iptables -t nat -A POSTROUTING -s 10.7.0.0/24 ! -d 10.7.0.0/24 -j SNAT --to 10.148.0.10
+ExecStart=/usr/sbin/iptables -I INPUT -p udp --dport 51820 -j ACCEPT
+ExecStart=/usr/sbin/iptables -I FORWARD -s 10.7.0.0/24 -j ACCEPT
+ExecStart=/usr/sbin/iptables -I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+ExecStop=/usr/sbin/iptables -t nat -D POSTROUTING -s 10.7.0.0/24 ! -d 10.7.0.0/24 -j SNAT --to 10.148.0.10
+ExecStop=/usr/sbin/iptables -D INPUT -p udp --dport 51820 -j ACCEPT
+ExecStop=/usr/sbin/iptables -D FORWARD -s 10.7.0.0/24 -j ACCEPT
+ExecStop=/usr/sbin/iptables -D FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+RemainAfterExit=yes
+[Install]
+WantedBy=multi-user.target
+###########################################################################################
+systemctl enable --now wg-quick@wg0.service //启动服务
+systemctl status wg-quick@wg0.service
+systemctl stop wg-quick@wg0.service
+systemctl restart wg-quick@wg0.service
+systemctl disable --now wg-quick@wg0.service
+
+systemctl enable --now wg-iptables.service
+systemctl status wg-iptables.service
+systemctl disable --now wg-iptables.service
+
+rm -f /etc/systemd/system/wg-iptables.service
+###########################################################################################
+##显示客户端二维码
+qrencode -t UTF8 < client.conf
+
+##debian/ubuntu wireguard客户端
+apt install wireguard
+apt install resolvconf
+/etc/wireguard/client.conf
+#启动方法一
+wg-quick up client
+wg-quick down client
+#启动方法二
+systemctl enable wg-quick@client
+systemctl start wg-quick@client
+systemctl stop wg-quick@client
+
+##openwrt初始化
+vi /etc/config/network
+passwd
+reboot
+opkg update
+opkg remove <package>
+##openwrt客户端
+opkg install luci-app-wireguard
+opkg install qrencode
+创建interface 协议WireGuard VPN 填写配置client.conf
+取消Bring up on boot
+选中Route Allowed IPs
+在interface 防火墙设置中：将防火墙区域分配给wan

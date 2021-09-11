@@ -1,0 +1,104 @@
+{
+  "log": {
+    "loglevel": "warning"
+  },
+  "inbounds": [
+    {
+      "port": 1080,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": false,
+        "ip": "127.0.0.1"
+      },
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ]
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "directwow",
+      "protocol": "shadowsocks",
+      "settings": {
+        "servers": [
+          {
+            "address": "wower.cool",
+            "port": 80,
+            "method": "chacha20-ietf-poly1305",
+            "password": "passwdsec"
+          }
+        ]
+      },
+      "proxySettings": {
+        "tag": "transport_layer"
+      }
+    },
+    {
+      "tag": "proxywowtls",
+      "protocol": "shadowsocks",
+      "settings": {
+        "servers": [
+          {
+            "address": "wower.cool",
+            "port": 80,
+            "method": "chacha20-ietf-poly1305",
+            "password": "passwdsec"
+          }
+        ]
+      },
+      "proxySettings": {
+        "tag": "transport_layertls"
+      }
+    },
+    {
+      "tag": "transport_layer",
+      "protocol": "freedom",
+      "settings": {
+        "redirect": "ipv6.wower.cool:8388"
+      },
+      "streamSettings": {
+        "wsSettings": {
+          "path": "/wow"
+        },
+        "network": "ws",
+        "security": "none"
+      },
+      "mux": {
+        "enabled": true
+      }
+    },
+    {
+      "tag": "transport_layertls",
+      "protocol": "freedom",
+      "settings": {
+        "redirect": "ipv6.wower.cool:443"
+      },
+      "streamSettings": {
+        "wsSettings": {
+          "path": "/wow"
+        },
+        "network": "ws",
+        "security": "tls"
+      },
+      "mux": {
+        "enabled": true
+      }
+    }
+  ],
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rule": [
+      {
+        "type": "field",
+        "network": "tcp,udp",
+        "outboundTag": "proxywowtls"
+      }
+    ]
+  }
+}

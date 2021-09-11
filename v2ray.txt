@@ -1,0 +1,71 @@
+#v2ray
+#https://github.com/v2fly
+
+apt install v2ray
+
+systemctl restart v2ray
+systemctl status v2ray
+systemctl stop v2ray
+
+#lsof -i :8000 无法显示端口占用情况，取消动态用户
+/lib/systemd/system/v2ray.service
+DynamicUser=false
+
+vi /etc/v2ray/config.json
+
+#quic+证书测试不成功
+"streamSettings": {
+    "network": "quic",
+    "quicSettings": {
+        "security": "none",
+        "key": "",
+        "header": {
+            "type": "none"
+        }
+    }，
+    "security": "tls",
+    "tlsSettings": {
+        "certificates": [
+            {
+                "certificateFile": "/etc/nginx/ipv4.wower.cool.pem",
+                "keyFile": "/etc/nginx/ipv4.wower.cool.key"
+            }
+        ]
+    }
+}
+
+#quic仅此模式测试成功,速度慢
+{
+    "port": 8111,
+    "protocol": "shadowsocks",
+    "settings": {
+        "method": "chacha20-ietf-poly1305",
+        "password": "passwdsec",
+        "network": "tcp"
+    },
+    "streamSettings": {
+        "network": "quic",
+        "quicSettings": {
+            "security": "none",
+            "key": "",
+            "header": {
+                "type": "none"
+            }
+        }
+    }
+ }      
+ ///////////////////////////////////////////////////////////////////////////////////////////////
+Android ss with v2ray-plugin连接v2ray时 plugin里设置concurrent connections为0，连接shadowsocks时设置为1
+Android quic-tls模式测试不成功
+
+#交叉连接
+Android ss连接v2ray延迟高速度慢。v2ray连接ss with v2ray-plugin使用serverconfig.json，同样延迟高速度慢
+Android ss with v2ray-plugin-->nginx + ss with v2ray-plugin匹配最佳
+v2ray use shadowsocks + tls匹配最佳
+
+#Ubuntu安装
+bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
+bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove
+vi /usr/local/etc/v2ray/config.json
+
+http://socks=localhost //win10设置socks代理地址

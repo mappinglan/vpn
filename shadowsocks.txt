@@ -1,0 +1,60 @@
+#shadowsocks
+#https://github.com/shadowsocks
+
+apt install shadowsocks-libev shadowsocks-v2ray-plugin nginx
+
+systemctl status shadowsocks-libev
+systemctl restart shadowsocks-libev
+systemctl stop shadowsocks-libev
+systemctl restart nginx
+systemctl status nginx
+systemctl stop nginx
+
+#lsof -i :8388 无法显示端口占用情况，取消动态用户
+/lib/systemd/system/shadowsocks-libev.service
+DynamicUser=false
+
+vi /etc/shadowsocks-libev/config.json
+
+{
+    "server":["::0", "0.0.0.0"],
+    "mode":"tcp_and_udp",
+    "server_port":8388,
+    "local_port":1080,
+    "password":"passwdsec",
+    "timeout":60,
+    "method":"chacha20-ietf-poly1305",
+    "plugin":"ss-v2ray-plugin",
+    "plugin_opts":"server;path=/wow;loglevel=none"
+}
+
+#单独使用shadowsocks-libev+WebSocket+TLS,plugin_opts选项使用如下配置
+"plugin_opts":"server;path=/wow;loglevel=none;tls;host=ipv6.wower.cool;cert=/etc/nginx/ipv6.wower.cool.pem;key=/etc/nginx/ipv6.wower.cool.key"
+
+#QUIC模式(测试不成功）
+"mode":"tcp_only"
+"plugin_opts":"server;loglevel=none;mode=quic;host=ipv6.wower.cool;cert=/etc/nginx/ipv6.wower.cool.pem;key=/etc/nginx/ipv6.wower.cool.key"
+
+scp wower.cool.pem root@wower.cool:/etc/nginx/wower.cool.pem
+scp wower.cool.key root@wower.cool:/etc/nginx/wower.cool.key
+scp ipv6.wower.cool.pem root@ipv6.wower.cool:/etc/nginx/ipv6.wower.cool.pem
+scp ipv6.wower.cool.key root@ipv6.wower.cool:/etc/nginx/ipv6.wower.cool.key
+scp ipv4.wower.cool.pem root@ipv4.wower.cool:/etc/nginx/ipv4.wower.cool.pem
+scp ipv4.wower.cool.key root@ipv4.wower.cool:/etc/nginx/ipv4.wower.cool.key
+
+vi /etc/nginx/nginx.conf
+
+##windowsGUI客户端（tls自由组合）
+#WebSocket+TLS模式
+插件程序：v2ray-plugin_windows_amd64
+插件选项：tls;host=wower.cool;path=/wow
+#QUIC模式（未测试）
+插件选项：mode=quic;host=wower.cool
+
+#Ubuntu下载v2ray-plugin
+pushd /tmp > /dev/null
+VP_URL="https://github.com/shadowsocks/v2ray-plugin/releases/download/v1.3.1/v2ray-plugin-linux-amd64-v1.3.1.tar.gz"
+wget -O- "$VP_URL" | tar zx
+mv v2ray-plugin* /usr/local/bin/ss-v2ray-plugin
+unset VP_URL
+popd > /dev/null

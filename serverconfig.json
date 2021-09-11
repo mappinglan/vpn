@@ -1,0 +1,279 @@
+{
+    "log": {
+        "loglevel": "error"
+    },
+    "inbounds": [
+        {
+            "listen": "::0",
+            "port": 8000,
+            "protocol": "vmess",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "3b3a0e2c-4f28-4b0a-94c1-7b489bcd4020"
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "ws",
+                "wsSettings": {
+                    "path": "/ray"
+                },
+                "security": "tls",
+                "tlsSettings": {
+                    "certificates": [
+                        {
+                            "certificateFile": "/etc/nginx/ipv6.wower.cool.pem",
+                            "keyFile": "/etc/nginx/ipv6.wower.cool.key"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "listen": "0.0.0.0",
+            "port": 8000,
+            "protocol": "vmess",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "3b3a0e2c-4f28-4b0a-94c1-7b489bcd4020"
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "ws",
+                "wsSettings": {
+                    "path": "/ray"
+                },
+                "security": "tls",
+                "tlsSettings": {
+                    "certificates": [
+                        {
+                            "certificateFile": "/etc/nginx/ipv4.wower.cool.pem",
+                            "keyFile": "/etc/nginx/ipv4.wower.cool.key"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "port": 8001,
+            "protocol": "vmess",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "3b3a0e2c-4f28-4b0a-94c1-7b489bcd4020"
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "ws",
+                "wsSettings": {
+                    "path": "/ray"
+                }
+            }
+        },
+        {
+            "listen": "::0",
+            "port": 8010,
+            "protocol": "vmess",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "3b3a0e2c-4f28-4b0a-94c1-7b489bcd4020"
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "certificates": [
+                        {
+                            "certificateFile": "/etc/nginx/ipv6.wower.cool.pem",
+                            "keyFile": "/etc/nginx/ipv6.wower.cool.key"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "listen": "0.0.0.0",
+            "port": 8010,
+            "protocol": "vmess",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "3b3a0e2c-4f28-4b0a-94c1-7b489bcd4020"
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "certificates": [
+                        {
+                            "certificateFile": "/etc/nginx/ipv4.wower.cool.pem",
+                            "keyFile": "/etc/nginx/ipv4.wower.cool.key"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "port": 8011,
+            "protocol": "vmess",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "3b3a0e2c-4f28-4b0a-94c1-7b489bcd4020"
+                    }
+                ]
+            }
+        },
+        {
+            "listen": "::0",
+            "port": 8100,
+            "protocol": "shadowsocks",
+            "settings": {
+                "method": "chacha20-ietf-poly1305",
+                "password": "passwdsec",
+                "network": "tcp,udp"
+            },
+            "streamSettings": {
+                "network": "ws",
+                "wsSettings": {
+                    "path": "/ss"
+                },
+                "security": "tls",
+                "tlsSettings": {
+                    "certificates": [
+                        {
+                            "certificateFile": "/etc/nginx/ipv6.wower.cool.pem",
+                            "keyFile": "/etc/nginx/ipv6.wower.cool.key"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "listen": "0.0.0.0",
+            "port": 8100,
+            "protocol": "shadowsocks",
+            "settings": {
+                "method": "chacha20-ietf-poly1305",
+                "password": "passwdsec",
+                "network": "tcp,udp"
+            },
+            "streamSettings": {
+                "network": "ws",
+                "wsSettings": {
+                    "path": "/ss"
+                },
+                "security": "tls",
+                "tlsSettings": {
+                    "certificates": [
+                        {
+                            "certificateFile": "/etc/nginx/ipv4.wower.cool.pem",
+                            "keyFile": "/etc/nginx/ipv4.wower.cool.key"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "port": 8101,
+            "protocol": "shadowsocks",
+            "settings": {
+                "method": "chacha20-ietf-poly1305",
+                "password": "passwdsec",
+                "network": "tcp,udp"
+            },
+            "streamSettings": {
+                "network": "ws",
+                "wsSettings": {
+                    "path": "/ss"
+                }
+            }
+        },
+        {
+            "listen": "::0",
+            "port": 8110,
+            "protocol": "shadowsocks",
+            "settings": {
+                "method": "chacha20-ietf-poly1305",
+                "password": "passwdsec",
+                "network": "tcp,udp"
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "certificates": [
+                        {
+                            "certificateFile": "/etc/nginx/ipv6.wower.cool.pem",
+                            "keyFile": "/etc/nginx/ipv6.wower.cool.key"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "listen": "0.0.0.0",
+            "port": 8110,
+            "protocol": "shadowsocks",
+            "settings": {
+                "method": "chacha20-ietf-poly1305",
+                "password": "passwdsec",
+                "network": "tcp,udp"
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "certificates": [
+                        {
+                            "certificateFile": "/etc/nginx/ipv4.wower.cool.pem",
+                            "keyFile": "/etc/nginx/ipv4.wower.cool.key"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "port": 8111,
+            "protocol": "shadowsocks",
+            "settings": {
+                "method": "chacha20-ietf-poly1305",
+                "password": "passwdsec",
+                "network": "tcp,udp"
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom",
+            "settings": {},
+            "tag": "direct"
+        },
+        {
+            "protocol": "blackhole",
+            "settings": {},
+            "tag": "block"
+        }
+    ],
+    "routing": {
+        "domainStrategy": "AsIs",
+        "rules": [
+            {
+                "type": "field",
+                "ip": [
+                    "geoip:private"
+                ],
+                "outboundTag": "block"
+            }
+        ]
+    }
+}

@@ -1,0 +1,99 @@
+#openvpn second
+#https://github.com/OpenVPN
+
+apt install openvpn
+
+#openvpn单独监听IPv4和IPV6端口，需独立开启IPv4和IPV6两个服务，并且必须配置不同的LAN网段。客户端不验证请求域名和证书域名的一致性，IPv4和IPV6可以统一采用ipv6.wower.cool证书
+#只需切换客户端配置文件的IP地址（域名）即可切换IPv4和IPv6隧道，并且视为不同客户端，同时连接互不干扰
+#上传配置文件 /etc/openvpn/server
+scp -r ./server root@ipv6.wower.cool:/etc/openvpn
+
+#修改server*.conf ，local改为当前主机IP
+#IPv4地址自动监听IPv4端口，IPv6地址(可以是域名)自动监听IPv6端口
+vi /etc/openvpn/server/server4.conf
+vi /etc/openvpn/server/server6.conf
+###############################################################################
+#ikev2已经配置过
+vi /etc/sysctl.conf
+
+net.ipv4.ip_forward = 1
+
+sysctl -p
+
+sysctl -w net.ipv4.ip_forward=1
+
+iptables -t nat -A POSTROUTING -o ens4 -j MASQUERADE
+ip6tables -t nat -A POSTROUTING -o ens4 -j MASQUERADE
+
+GCP貌似不能NAT IPv6数据包
+
+#CMD刷新DNS缓存
+ipconfig/flushdns
+###############################################################################
+#iptables ikev2已经配置过，不需要配置
+vi /etc/systemd/system/openvpn-iptables.service
+
+[Unit]
+Before=network.target
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/iptables -t nat -A POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to 10.148.0.10
+ExecStart=/usr/sbin/iptables -I INPUT -p udp --dport 1194 -j ACCEPT
+ExecStart=/usr/sbin/iptables -I FORWARD -s 10.8.0.0/24 -j ACCEPT
+ExecStart=/usr/sbin/iptables -I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+ExecStop=/usr/sbin/iptables -t nat -D POSTROUTING -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to 10.148.0.10
+ExecStop=/usr/sbin/iptables -D INPUT -p udp --dport 1194 -j ACCEPT
+ExecStop=/usr/sbin/iptables -D FORWARD -s 10.8.0.0/24 -j ACCEPT
+ExecStop=/usr/sbin/iptables -D FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+RemainAfterExit=yes
+[Install]
+WantedBy=multi-user.target
+###############################################################################
+systemctl restart openvpn
+systemctl status openvpn
+systemctl enable --now openvpn-server@server4.service //启动IPv4服务
+systemctl enable --now openvpn-server@server6.service //启动IPv6服务
+systemctl status openvpn-server@server4.service
+systemctl status openvpn-server@server6.service
+systemctl restart openvpn-server@server4.service
+systemctl restart openvpn-server@server6.service
+systemctl stop openvpn-server@server4.service
+systemctl stop openvpn-server@server6.service
+systemctl disable --now openvpn-server@server4.service
+systemctl disable --now openvpn-server@server6.service
+
+systemctl enable --now openvpn-iptables.service
+systemctl status openvpn-iptables.service
+systemctl disable --now openvpn-iptables.service
+
+rm -f /etc/systemd/system/openvpn-iptables.service
+###############################################################################
+#openvpn GUI
+apt install network-manager-openvpn-gnome
+
+#l2tp GUI
+apt install network-manager-l2tp-gnome
+
+#strongswan GUI
+network-manager-strongswan
+
+##openwrt初始化
+vi /etc/config/network
+passwd
+reboot
+opkg update
+opkg remove <package>
+##openwrt客户端
+opkg install luci-app-openvpn
+opkg install openvpn-openssl
+上传ovpn配置文件
+#启动方式一（旧版本openwrt，19.07以下)
+创建新的interface
+使用以下值填写表单：name = tun0, Protocol = Unmanaged, Interface = tun0
+在interface常规设置中：取消选中启动时启动复选框
+在interface防火墙设置中：将防火墙区域分配给wan
+重启路由器
+#启动方式二（新版本openwrt，19.07以上)
+单击顶部栏中的网络，然后单击防火墙以打开防火墙配置页面
+单击页面底部区域列表中wan（红色）区域的编辑按钮。
+单击“高级设置”,Covered devices选择tun0
