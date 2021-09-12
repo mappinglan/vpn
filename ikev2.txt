@@ -303,7 +303,6 @@ ipsec verify
 
 vi /etc/sysctl.conf
 
-net.ipv4.ip_forward = 1
 net.ipv4.conf.all.rp_filter = 0
 net.ipv4.conf.default.rp_filter = 0
 net.ipv4.conf.eth0.rp_filter = 0
@@ -330,12 +329,14 @@ conn vpn
   auto=add
 
 systemctl enable --now ipsec
-ipsec initnss
+
 ipsec import client.p12
 ipsec addconn vpn
 ipsec auto --up vpn
 ipsec auto --down vpn
 ipsec restart
+
+ipsec initnss
 
 #如果配置域名而不是IP，无法连接
 #addconn: ERROR: hostname.example.com failed DNSSEC validation!

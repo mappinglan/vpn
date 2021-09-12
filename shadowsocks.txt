@@ -37,10 +37,13 @@ vi /etc/shadowsocks-libev/config.json
 
 scp wower.cool.pem root@wower.cool:/etc/nginx/wower.cool.pem
 scp wower.cool.key root@wower.cool:/etc/nginx/wower.cool.key
-scp ipv6.wower.cool.pem root@ipv6.wower.cool:/etc/nginx/ipv6.wower.cool.pem
-scp ipv6.wower.cool.key root@ipv6.wower.cool:/etc/nginx/ipv6.wower.cool.key
+scp ipv6.wower.cool.pem root@wower.cool:/etc/nginx/ipv6.wower.cool.pem
+scp ipv6.wower.cool.pem root@wower.cool:/etc/nginx/ipv6.wower.cool.pem
+
 scp ipv4.wower.cool.pem root@ipv4.wower.cool:/etc/nginx/ipv4.wower.cool.pem
 scp ipv4.wower.cool.key root@ipv4.wower.cool:/etc/nginx/ipv4.wower.cool.key
+scp ipv6.wower.cool.pem root@ipv4.wower.cool:/etc/nginx/ipv6.wower.cool.pem
+scp ipv6.wower.cool.key root@ipv4.wower.cool:/etc/nginx/ipv6.wower.cool.key
 
 vi /etc/nginx/nginx.conf
 #参见nginx.conf
