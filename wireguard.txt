@@ -3,7 +3,8 @@
 
 apt install wget wireguard resolvconf qrencode
 
-#wireguard同时监听IPv4和IPV6同一端口，只需切换客户端配置文件的IP地址（域名）即可切换IPv4和IPv6隧道,同一配置文件的IPv4和IPv6视为同一客户端，同时连接互相干扰
+#wireguard同时监听IPv4和IPV6同一端口，只需切换客户端配置文件的域名即可切换IPv4和IPv6隧道(对于IPv6，客户端只能配置域名)
+#同一配置文件的IPv4和IPv6视为同一客户端，同时连接互相干扰
 #51820端口被封的概率非常大
 #上传配置文件 /etc/wireguard/
 scp wg0.conf root@ipv6.wower.cool:/etc/wireguard/wg0.conf

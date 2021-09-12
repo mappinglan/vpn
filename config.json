@@ -28,6 +28,30 @@
   ],
   "outbounds": [
     {
+      "tag": "directraytls",
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "xxxx.xxxxx.xxxx",
+            "port": 8000,
+            "users": [
+              {
+                "id": "3b3a0e2c-4f28-4b0a-94c1-7b489bcd4020"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "wsSettings": {
+          "path": "/ray"
+        },
+        "security": "tls"
+      }
+    },
+    {
       "tag": "directsstcptls",
       "protocol": "shadowsocks",
       "settings": {
@@ -190,30 +214,6 @@
         "wsSettings": {
           "path": "/ray"
         }
-      }
-    },
-    {
-      "tag": "directraytls",
-      "protocol": "vmess",
-      "settings": {
-        "vnext": [
-          {
-            "address": "xxxx.xxxxx.xxxx",
-            "port": 8000,
-            "users": [
-              {
-                "id": "3b3a0e2c-4f28-4b0a-94c1-7b489bcd4020"
-              }
-            ]
-          }
-        ]
-      },
-      "streamSettings": {
-        "network": "ws",
-        "wsSettings": {
-          "path": "/ray"
-        },
-        "security": "tls"
       }
     },
     {

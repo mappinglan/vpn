@@ -7,11 +7,17 @@ systemctl restart v2ray
 systemctl status v2ray
 systemctl stop v2ray
 
+vi /etc/v2ray/config.json
+参见serverconfig.json
+
+#v2ray同时监听IPv4和IPV6同一端口，TLS模式只需切换客户端配置文件的域名（只能配置域名，IP无法连接）即可切换IPv4和IPv6
+#对于websocket,tcp两种传输协议的TLS模式，客户端会验证请求域名和证书域名的一致性，服务端必须同时添加IPv4和IPV6两个域名的证书
+#非TLS模式，切换客户端配置文件的IP或者域名均可切换IPv4和IPv6
+#Android ss with v2ray-plugin验证的是Hostname，websocket-http模式下Hostname可以为空
+
 #lsof -i :8000 无法显示端口占用情况，取消动态用户
 /lib/systemd/system/v2ray.service
 DynamicUser=false
-
-vi /etc/v2ray/config.json
 
 #quic+证书测试不成功
 "streamSettings": {
@@ -59,9 +65,9 @@ Android ss with v2ray-plugin连接v2ray时 plugin里设置concurrent connections
 Android quic-tls模式测试不成功
 
 #交叉连接
-Android ss连接v2ray延迟高速度慢。v2ray连接ss with v2ray-plugin使用serverconfig.json，同样延迟高速度慢
-Android ss with v2ray-plugin-->nginx + ss with v2ray-plugin匹配最佳
-v2ray use shadowsocks + tls匹配最佳
+
+Android ss （or with v2ray-plugin) 连接v2ray和shadowsocks可以自由组合
+v2ray 连接 shadowsocks 配置文件参见v2ssconfig.json
 
 #Ubuntu安装
 bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)

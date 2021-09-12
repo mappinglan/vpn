@@ -4,7 +4,7 @@
 apt install openvpn
 
 #openvpn单独监听IPv4和IPV6端口，需独立开启IPv4和IPV6两个服务，并且必须配置不同的LAN网段。客户端不验证请求域名和证书域名的一致性，IPv4和IPV6可以统一采用ipv6.wower.cool证书
-#只需切换客户端配置文件的IP地址（域名）即可切换IPv4和IPv6隧道，并且视为不同客户端，同时连接互不干扰
+#只需切换客户端配置文件的域名（切换IP地址也可以）即可切换IPv4和IPv6隧道，并且视为不同客户端，同时连接互不干扰
 #上传配置文件 /etc/openvpn/server
 scp -r ./server root@ipv6.wower.cool:/etc/openvpn
 

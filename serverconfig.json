@@ -4,7 +4,6 @@
     },
     "inbounds": [
         {
-            "listen": "::0",
             "port": 8000,
             "protocol": "vmess",
             "settings": {
@@ -25,30 +24,7 @@
                         {
                             "certificateFile": "/etc/nginx/ipv6.wower.cool.pem",
                             "keyFile": "/etc/nginx/ipv6.wower.cool.key"
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "listen": "0.0.0.0",
-            "port": 8000,
-            "protocol": "vmess",
-            "settings": {
-                "clients": [
-                    {
-                        "id": "3b3a0e2c-4f28-4b0a-94c1-7b489bcd4020"
-                    }
-                ]
-            },
-            "streamSettings": {
-                "network": "ws",
-                "wsSettings": {
-                    "path": "/ray"
-                },
-                "security": "tls",
-                "tlsSettings": {
-                    "certificates": [
+                        },
                         {
                             "certificateFile": "/etc/nginx/ipv4.wower.cool.pem",
                             "keyFile": "/etc/nginx/ipv4.wower.cool.key"
@@ -75,7 +51,6 @@
             }
         },
         {
-            "listen": "::0",
             "port": 8010,
             "protocol": "vmess",
             "settings": {
@@ -93,27 +68,7 @@
                         {
                             "certificateFile": "/etc/nginx/ipv6.wower.cool.pem",
                             "keyFile": "/etc/nginx/ipv6.wower.cool.key"
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "listen": "0.0.0.0",
-            "port": 8010,
-            "protocol": "vmess",
-            "settings": {
-                "clients": [
-                    {
-                        "id": "3b3a0e2c-4f28-4b0a-94c1-7b489bcd4020"
-                    }
-                ]
-            },
-            "streamSettings": {
-                "network": "tcp",
-                "security": "tls",
-                "tlsSettings": {
-                    "certificates": [
+                        },
                         {
                             "certificateFile": "/etc/nginx/ipv4.wower.cool.pem",
                             "keyFile": "/etc/nginx/ipv4.wower.cool.key"
@@ -134,7 +89,6 @@
             }
         },
         {
-            "listen": "::0",
             "port": 8100,
             "protocol": "shadowsocks",
             "settings": {
@@ -153,28 +107,7 @@
                         {
                             "certificateFile": "/etc/nginx/ipv6.wower.cool.pem",
                             "keyFile": "/etc/nginx/ipv6.wower.cool.key"
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "listen": "0.0.0.0",
-            "port": 8100,
-            "protocol": "shadowsocks",
-            "settings": {
-                "method": "chacha20-ietf-poly1305",
-                "password": "passwdsec",
-                "network": "tcp,udp"
-            },
-            "streamSettings": {
-                "network": "ws",
-                "wsSettings": {
-                    "path": "/ss"
-                },
-                "security": "tls",
-                "tlsSettings": {
-                    "certificates": [
+                        },
                         {
                             "certificateFile": "/etc/nginx/ipv4.wower.cool.pem",
                             "keyFile": "/etc/nginx/ipv4.wower.cool.key"
@@ -199,7 +132,6 @@
             }
         },
         {
-            "listen": "::0",
             "port": 8110,
             "protocol": "shadowsocks",
             "settings": {
@@ -215,25 +147,7 @@
                         {
                             "certificateFile": "/etc/nginx/ipv6.wower.cool.pem",
                             "keyFile": "/etc/nginx/ipv6.wower.cool.key"
-                        }
-                    ]
-                }
-            }
-        },
-        {
-            "listen": "0.0.0.0",
-            "port": 8110,
-            "protocol": "shadowsocks",
-            "settings": {
-                "method": "chacha20-ietf-poly1305",
-                "password": "passwdsec",
-                "network": "tcp,udp"
-            },
-            "streamSettings": {
-                "network": "tcp",
-                "security": "tls",
-                "tlsSettings": {
-                    "certificates": [
+                        },
                         {
                             "certificateFile": "/etc/nginx/ipv4.wower.cool.pem",
                             "keyFile": "/etc/nginx/ipv4.wower.cool.key"

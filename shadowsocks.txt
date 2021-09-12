@@ -43,6 +43,7 @@ scp ipv4.wower.cool.pem root@ipv4.wower.cool:/etc/nginx/ipv4.wower.cool.pem
 scp ipv4.wower.cool.key root@ipv4.wower.cool:/etc/nginx/ipv4.wower.cool.key
 
 vi /etc/nginx/nginx.conf
+#参见nginx.conf
 
 ##windowsGUI客户端（tls自由组合）
 #WebSocket+TLS模式
