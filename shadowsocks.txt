@@ -29,21 +29,29 @@ vi /etc/shadowsocks-libev/config.json
 }
 
 #单独使用shadowsocks-libev+WebSocket+TLS,plugin_opts选项使用如下配置
-"plugin_opts":"server;path=/wow;loglevel=none;tls;host=ipv6.wower.cool;cert=/etc/nginx/ipv6.wower.cool.pem;key=/etc/nginx/ipv6.wower.cool.key"
+"plugin_opts":"server;path=/wow;loglevel=none;tls;host=ipv6.wower.cool;cert=/etc/ssl/certs/ipv6.wower.cool.pem;key=/etc/ssl/private/ipv6.wower.cool.key"
 
 #QUIC模式(测试不成功）
 "mode":"tcp_only"
-"plugin_opts":"server;loglevel=none;mode=quic;host=ipv6.wower.cool;cert=/etc/nginx/ipv6.wower.cool.pem;key=/etc/nginx/ipv6.wower.cool.key"
+"plugin_opts":"server;loglevel=none;mode=quic;host=ipv6.wower.cool;cert=/etc/ssl/certs/ipv6.wower.cool.pem;key=/etc/ssl/private/ipv6.wower.cool.key"
 
-scp wower.cool.pem root@wower.cool:/etc/nginx/wower.cool.pem
-scp wower.cool.key root@wower.cool:/etc/nginx/wower.cool.key
-scp ipv6.wower.cool.pem root@wower.cool:/etc/nginx/ipv6.wower.cool.pem
-scp ipv6.wower.cool.pem root@wower.cool:/etc/nginx/ipv6.wower.cool.pem
+scp wower.cool.pem root@wower.cool:/etc/ssl/certs/wower.cool.pem
+scp wower.cool.key root@wower.cool:/etc/ssl/private/wower.cool.key
+scp ipv4.wower.cool.pem root@wower.cool:/etc/ssl/certs/ipv4.wower.cool.pem
+scp ipv4.wower.cool.key root@wower.cool:/etc/ssl/private/ipv4.wower.cool.key
+scp ipv6.wower.cool.pem root@wower.cool:/etc/ssl/certs/ipv6.wower.cool.pem
+scp ipv6.wower.cool.key root@wower.cool:/etc/ssl/private/ipv6.wower.cool.key
+scp mail.wower.cool.pem root@wower.cool:/etc/ssl/certs/mail.wower.cool.pem
+scp mail.wower.cool.key root@wower.cool:/etc/ssl/private/mail.wower.cool.key
 
-scp ipv4.wower.cool.pem root@ipv4.wower.cool:/etc/nginx/ipv4.wower.cool.pem
-scp ipv4.wower.cool.key root@ipv4.wower.cool:/etc/nginx/ipv4.wower.cool.key
-scp ipv6.wower.cool.pem root@ipv4.wower.cool:/etc/nginx/ipv6.wower.cool.pem
-scp ipv6.wower.cool.key root@ipv4.wower.cool:/etc/nginx/ipv6.wower.cool.key
+scp wower.cool.pem root@ipv4.wower.cool:/etc/ssl/certs/wower.cool.pem
+scp wower.cool.key root@ipv4.wower.cool:/etc/ssl/private/wower.cool.key
+scp ipv4.wower.cool.pem root@ipv4.wower.cool:/etc/ssl/certs/ipv4.wower.cool.pem
+scp ipv4.wower.cool.key root@ipv4.wower.cool:/etc/ssl/private/ipv4.wower.cool.key
+scp ipv6.wower.cool.pem root@ipv4.wower.cool:/etc/ssl/certs/ipv6.wower.cool.pem
+scp ipv6.wower.cool.key root@ipv4.wower.cool:/etc/ssl/private/ipv6.wower.cool.key
+scp mail.wower.cool.pem root@ipv4.wower.cool:/etc/ssl/certs/mail.wower.cool.pem
+scp mail.wower.cool.key root@ipv4.wower.cool:/etc/ssl/private/mail.wower.cool.key
 
 vi /etc/nginx/nginx.conf
 #参见nginx.conf

@@ -1,0 +1,283 @@
+#postfix
+#http://www.postfix.org
+#https://github.com/dovecot
+
+apt install mariadb-server
+apt install postfix postfix-mysql dovecot-imapd dovecot-pop3d dovecot-lmtpd dovecot-mysql
+apt install roundcube //自动安装apache2，php等额外模块
+#apt install php
+#apt install apache2 //自动安装php
+#apt install mailutils
+
+postconf mail_version
+postqueue -p
+
+systemctl restart postfix
+systemctl restart dovecot
+systemctl restart apache2
+systemctl status postfix
+systemctl status dovecot
+systemctl status apache2
+systemctl stop postfix
+systemctl stop dovecot
+systemctl stop apache2
+
+netstat -lnpt
+lsof -i
+netstat -tuln | grep :25
+
+dig MX wower.cool +short
+dig A wower.cool +short
+
+telnet localhost 25
+
+tail /var/log/mail.log
+tail /var/log/mail.err
+
+scp mail.wower.cool.pem root@mail.wower.cool:/etc/ssl/certs/mail.wower.cool.pem
+scp mail.wower.cool.key root@mail.wower.cool:/etc/ssl/private/mail.wower.cool.key
+##########################################################################
+vi /etc/postfix/main.cf //复制
+参见main.cf
+
+vi /etc/postfix/master.cf //修改
+submission inet n       -       y       -       -       smtpd
+  -o syslog_name=postfix/submission
+  -o smtpd_tls_security_level=encrypt
+  -o smtpd_sasl_auth_enable=yes
+  -o smtpd_tls_auth_only=yes
+smtps     inet  n       -       y       -       -       smtpd
+  -o syslog_name=postfix/smtps
+  -o smtpd_tls_wrappermode=yes
+  -o smtpd_sasl_auth_enable=yes
+##########################################################################################################
+#此处不需要设置
+###---------------------------------------------------------------
+#/etc/postfix/main.cf中设置域名查询方式（文件）
+virtual_mailbox_domains = /etc/postfix/virtual_mailbox_domains
+
+vi /etc/postfix/virtual_mailbox_domains
+wower.cool #domain
+
+postmap /etc/postfix/virtual_mailbox_domains
+命令将创建一个新文件 /etc/postfix/virtual_mailbox_domains.db
+###---------------------------------
+#/etc/postfix/main.cf中设置域名查询方式（mysql）
+virtual_mailbox_domains = mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf  
+virtual_mailbox_maps = mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf  
+virtual_alias_maps = mysql:/etc/postfix/mysql-virtual-alias-maps.cf
+###---------------------------------------------------------------
+#非必要主机设置
+sudo hostnamectl set-hostname mail.wower.cool
+hostname -f
+vi /etc/hostname
+mail.wower.cool
+vi /etc/hosts
+34.126.153.122  mail.wower.cool mail
+##########################################################################################################
+#mysql_secure_installation
+#ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'passwdsec';
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'passwdsec';
+CREATE USER 'mailuser'@'localhost' IDENTIFIED BY 'passwdsec';
+#mysqladmin -u root create maildb
+create database maildb character set utf8;
+#CREATE DATABASE maildb;
+#GRANT SELECT ON maildb.* TO 'mailuser'@'localhost' IDENTIFIED BY 'passwdsec';
+#grant all on maildb.* to mailuser@'localhost' identified by 'passwdsec';
+grant all on maildb.* to mailuser@'localhost';
+FLUSH PRIVILEGES;
+USE maildb;
+mysql -u root
+
+CREATE TABLE `virtual_domains` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `virtual_users` (
+  `id` int(11) NOT NULL auto_increment,
+  `domain_id` int(11) NOT NULL,
+  `password` varchar(106) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `virtual_aliases` (
+  `id` int(11) NOT NULL auto_increment,
+  `domain_id` int(11) NOT NULL,
+  `source` varchar(100) NOT NULL,
+  `destination` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (domain_id) REFERENCES virtual_domains(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO maildb.virtual_domains (name) VALUES ('wower.cool');
+#INSERT INTO maildb.virtual_domains (name) VALUES ('mail.wower.cool');
+SELECT * FROM maildb.virtual_domains;
+
+#doveadm pw -s SHA512-CRYPT -p "passwdsec" -r 5000
+#INSERT INTO maildb.virtual_users (domain_id, password , email) VALUES ('1', '$6$m6ZB/7P1k/o.XzZB$/0A987Th1lKcMhVPbJynTjpK4O.K/MLMSpiZYZUK.ubq55JyEuEGpv19/H7QZk41V0md0NVBmIVzKUL9hIHUi0', 'admin@wower.cool');
+#INSERT INTO maildb.virtual_users (domain_id, password , email) VALUES ('1', '$6$m6ZB/7P1k/o.XzZB$/0A987Th1lKcMhVPbJynTjpK4O.K/MLMSpiZYZUK.ubq55JyEuEGpv19/H7QZk41V0md0NVBmIVzKUL9hIHUi0', 'root@wower.cool');
+#INSERT INTO maildb.virtual_users (domain_id, password , email) VALUES ('1', '$6$m6ZB/7P1k/o.XzZB$/0A987Th1lKcMhVPbJynTjpK4O.K/MLMSpiZYZUK.ubq55JyEuEGpv19/H7QZk41V0md0NVBmIVzKUL9hIHUi0', 'me@wower.cool');
+
+insert into virtual_users(domain_id,password,email) values (1,ENCRYPT('passwdsec', CONCAT('$6$', SUBSTRING(SHA(RAND()), -16))),'admin@wower.cool');
+insert into virtual_users(domain_id,password,email) values (1,ENCRYPT('passwdsec', CONCAT('$6$', SUBSTRING(SHA(RAND()), -16))),'root@wower.cool');
+insert into virtual_users(domain_id,password,email) values (1,ENCRYPT('passwdsec', CONCAT('$6$', SUBSTRING(SHA(RAND()), -16))),'me@wower.cool');
+SELECT * FROM maildb.virtual_users;
+
+INSERT INTO maildb.virtual_aliases (domain_id, source, destination) VALUES ('1', 'all@wower.cool', 'admin@wower.cool');
+INSERT INTO maildb.virtual_aliases (domain_id, source, destination) VALUES ('1', 'all@wower.cool', 'root@wower.cool');
+INSERT INTO maildb.virtual_aliases (domain_id, source, destination) VALUES ('1', 'all@wower.cool', 'me@wower.cool');
+SELECT * FROM maildb.virtual_aliases;
+
+vi /etc/postfix/mysql-virtual-mailbox-domains.cf
+user = mailuser
+password = passwdsec
+hosts = 127.0.0.1
+dbname = maildb
+query = SELECT 1 FROM virtual_domains WHERE name='%s'
+
+postmap -q wower.cool mysql:/etc/postfix/mysql-virtual-mailbox-domains.cf
+
+vi /etc/postfix/mysql-virtual-mailbox-maps.cf
+user = mailuser
+password = passwdsec
+hosts = 127.0.0.1
+dbname = maildb
+query = SELECT 1 FROM virtual_users WHERE email='%s'
+
+postmap -q admin@wower.cool mysql:/etc/postfix/mysql-virtual-mailbox-maps.cf
+
+vi /etc/postfix/mysql-virtual-alias-maps.cf
+user = mailuser
+password = passwdsec
+hosts = 127.0.0.1
+dbname = maildb
+query = SELECT destination FROM virtual_aliases WHERE source='%s'
+
+postmap -q all@wower.cool mysql:/etc/postfix/mysql-virtual-alias-maps.cf
+##########################################################################################################
+vi /etc/dovecot/dovecot.conf
+!include_try /usr/share/dovecot/protocols.d/*.protocol //默认配置
+protocols = imap pop3 lmtp //添加此行
+###---------------------------------
+vi /etc/dovecot/conf.d/10-mail.conf
+mail_location = maildir:/var/mail/vhosts/%d/%n //修改此行
+mail_privileged_group = mail //默认配置
+###---------------------------------
+mkdir -p /var/mail/vhosts/wower.cool
+groupadd -g 5000 vmail
+useradd -r -g vmail -u 5000 vmail -d /var/mail/vhosts -c "virtual mail user"
+chown -R vmail:vmail /var/mail/vhosts/
+###---------------------------------
+vi /etc/dovecot/conf.d/10-auth.conf
+disable_plaintext_auth = yes //打开此行
+auth_mechanisms = plain login //修改此行
+!include auth-sql.conf.ext //打开此行
+#!include auth-passwdfile.conf.ext //关闭此行
+###---------------------------------------------------------------
+#使用mysql，暂不配置此项
+vi /etc/dovecot/conf.d/auth-passwdfile.conf.ext //复制
+passdb {
+  driver = passwd-file
+  args = scheme=PLAIN username_format=%u /etc/dovecot/dovecot-users
+}
+userdb {
+  driver = static
+  args = uid=vmail gid=vmail home=/var/mail/vhosts/%d/%n    
+}
+##########
+vi /etc/dovecot/dovecot-users //复制
+admin@wower.cool:{plain}passwdsec
+root@wower.cool:{plain}passwdsec
+me@wower.cool:{plain}passwdsec
+###---------------------------------------------------------------
+vi /etc/dovecot/conf.d/auth-sql.conf.ext //复制
+passdb {
+  driver = sql
+  args = /etc/dovecot/dovecot-sql.conf.ext
+}
+userdb {
+  driver = static
+  args = uid=vmail gid=vmail home=/var/mail/vhosts/%d/%n
+}
+##########
+vi /etc/dovecot/dovecot-sql.conf.ext //复制
+driver = mysql
+connect = host=127.0.0.1 dbname=maildb user=mailuser password=passwdsec
+default_pass_scheme = SHA512-CRYPT
+password_query = SELECT email as user, password FROM virtual_users WHERE email='%u';
+###---------------------------------------------------------------
+##########
+vi /etc/dovecot/conf.d/10-master.conf //复制
+参见 10-master.conf
+##########
+vi /etc/dovecot/conf.d/10-ssl.conf //修改此三项
+ssl = required
+ssl_cert = </etc/ssl/certs/mail.wower.cool.pem
+ssl_key = </etc/ssl/private/mail.wower.cool.key
+##########################################################################################################
+#gmail代理
+vi /etc/postfix/sasl/sasl_passwd
+[smtp.gmail.com]:587 wower126@gmail.com:ycfgzgzgdhwfakji
+
+postmap /etc/postfix/sasl/sasl_passwd
+命令将创建一个新文件 /etc/postfix/sasl/sasl_passwd.db
+
+chown root:root /etc/postfix/sasl/sasl_passwd /etc/postfix/sasl/sasl_passwd.db
+chmod 0600 /etc/postfix/sasl/sasl_passwd /etc/postfix/sasl/sasl_passwd.db
+
+#/etc/postfix/main.cf中设置中继
+relayhost = [smtp.gmail.com]:587
+smtp_sasl_auth_enable = yes
+smtp_sasl_security_options = noanonymous
+smtp_sasl_password_maps = hash:/etc/postfix/sasl/sasl_passwd
+
+systemctl restart postfix
+##########################################################################################################
+wget https://github.com/roundcube/roundcubemail/releases/download/1.4.11/roundcubemail-1.4.11-complete.tar.gz
+tar xvf roundcubemail-1.4.11-complete.tar.gz
+mv roundcubemail-1.4.11 /var/www/roundcube
+chown www-data:www-data -R /var/www/roundcube
+
+CREATE DATABASE roundcubedb DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE USER roundcubeuser@localhost IDENTIFIED BY 'passwdsec';
+GRANT ALL PRIVILEGES ON roundcubedb.* TO roundcubeuser@localhost;
+
+mysql -u roundcubeuser -p roundcubedb < /var/www/roundcube/SQL/mysql.initial.sql
+
+#rm -rf /var/www/roundcube/installer
+
+vi /etc/apache2/sites-available/default-ssl.conf
+vi /etc/apache2/sites-available/000-default.conf
+
+#配置 Apache https，启用SSL模块，修改配置文件
+a2enmod ssl
+systemctl restart apache2
+
+<IfModule mod_ssl.c>
+  <VirtualHost _default_:443>
+    ServerName mail.wower.cool
+    DocumentRoot /var/www/roundcube
+    SSLEngine on
+    SSLCertificateFile      /etc/ssl/certs/mail.wower.cool.pem
+    SSLCertificateKeyFile /etc/ssl/private/mail.wower.cool.key
+  </VirtualHost>
+</IfModule>
+
+a2ensite default-ssl
+systemctl reload apache2
+
+#配置 HTTPS 强制跳转，修改配置并添加最后三行
+<VirtualHost *:80>
+  ServerName mail.wower.cool
+  DocumentRoot /var/www/roundcube
+  RewriteEngine on
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^(.*) https://%{SERVER_NAME}$1 [L,R]
+</VirtualHost>
+
+a2enmod rewrite

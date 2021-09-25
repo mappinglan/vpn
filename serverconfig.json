@@ -22,12 +22,12 @@
                 "tlsSettings": {
                     "certificates": [
                         {
-                            "certificateFile": "/etc/nginx/ipv6.wower.cool.pem",
-                            "keyFile": "/etc/nginx/ipv6.wower.cool.key"
+                            "certificateFile": "/etc/ssl/certs/ipv6.wower.cool.pem",
+                            "keyFile": "/etc/ssl/private/ipv6.wower.cool.key"
                         },
                         {
-                            "certificateFile": "/etc/nginx/ipv4.wower.cool.pem",
-                            "keyFile": "/etc/nginx/ipv4.wower.cool.key"
+                            "certificateFile": "/etc/ssl/certs/ipv4.wower.cool.pem",
+                            "keyFile": "/etc/ssl/private/ipv4.wower.cool.key"
                         }
                     ]
                 }
@@ -66,12 +66,12 @@
                 "tlsSettings": {
                     "certificates": [
                         {
-                            "certificateFile": "/etc/nginx/ipv6.wower.cool.pem",
-                            "keyFile": "/etc/nginx/ipv6.wower.cool.key"
+                            "certificateFile": "/etc/ssl/certs/ipv6.wower.cool.pem",
+                            "keyFile": "/etc/ssl/private/ipv6.wower.cool.key"
                         },
                         {
-                            "certificateFile": "/etc/nginx/ipv4.wower.cool.pem",
-                            "keyFile": "/etc/nginx/ipv4.wower.cool.key"
+                            "certificateFile": "/etc/ssl/certs/ipv4.wower.cool.pem",
+                            "keyFile": "/etc/ssl/private/ipv4.wower.cool.key"
                         }
                     ]
                 }
@@ -105,12 +105,12 @@
                 "tlsSettings": {
                     "certificates": [
                         {
-                            "certificateFile": "/etc/nginx/ipv6.wower.cool.pem",
-                            "keyFile": "/etc/nginx/ipv6.wower.cool.key"
+                            "certificateFile": "/etc/ssl/certs/ipv6.wower.cool.pem",
+                            "keyFile": "/etc/ssl/private/ipv6.wower.cool.key"
                         },
                         {
-                            "certificateFile": "/etc/nginx/ipv4.wower.cool.pem",
-                            "keyFile": "/etc/nginx/ipv4.wower.cool.key"
+                            "certificateFile": "/etc/ssl/certs/ipv4.wower.cool.pem",
+                            "keyFile": "/etc/ssl/private/ipv4.wower.cool.key"
                         }
                     ]
                 }
@@ -145,12 +145,12 @@
                 "tlsSettings": {
                     "certificates": [
                         {
-                            "certificateFile": "/etc/nginx/ipv6.wower.cool.pem",
-                            "keyFile": "/etc/nginx/ipv6.wower.cool.key"
+                            "certificateFile": "/etc/ssl/certs/ipv6.wower.cool.pem",
+                            "keyFile": "/etc/ssl/private/ipv6.wower.cool.key"
                         },
                         {
-                            "certificateFile": "/etc/nginx/ipv4.wower.cool.pem",
-                            "keyFile": "/etc/nginx/ipv4.wower.cool.key"
+                            "certificateFile": "/etc/ssl/certs/ipv4.wower.cool.pem",
+                            "keyFile": "/etc/ssl/private/ipv4.wower.cool.key"
                         }
                     ]
                 }
