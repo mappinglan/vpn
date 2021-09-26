@@ -11,13 +11,15 @@ vi /etc/v2ray/config.json
 参见serverconfig.json
 
 #v2ray同时监听IPv4和IPV6同一端口，TLS模式只需切换客户端配置文件的域名（只能配置域名，IP无法连接）即可切换IPv4和IPv6
-#对于websocket,tcp两种传输协议的TLS模式，客户端会验证请求域名和证书域名的一致性，服务端必须同时添加IPv4和IPV6两个域名的证书
+#对于websocket,tcp两种传输协议的TLS模式，客户端会验证请求域名和证书域名的一致性，服务端必须同时添加IPv4和IPV6两个域名的证书，会根据域名自动匹配证书
 #非TLS模式，切换客户端配置文件的IP或者域名均可切换IPv4和IPv6
 #Android ss with v2ray-plugin验证的是Hostname，websocket-http模式下Hostname可以为空
 
-#lsof -i :8000 无法显示端口占用情况，取消动态用户
+#lsof -i :8000 无法显示端口占用情况，无权限读取证书，取消动态用户
 /lib/systemd/system/v2ray.service
 DynamicUser=false
+
+systemctl daemon-reload
 
 #quic+证书测试不成功
 "streamSettings": {

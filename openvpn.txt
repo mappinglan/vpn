@@ -49,7 +49,7 @@ RemainAfterExit=yes
 [Install]
 WantedBy=multi-user.target
 ###############################################################################
-systemctl restart openvpn
+systemctl restart openvpn //必要步骤
 systemctl status openvpn
 systemctl enable --now openvpn-server@server4.service //启动IPv4服务
 systemctl enable --now openvpn-server@server6.service //启动IPv6服务

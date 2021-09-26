@@ -4,7 +4,8 @@
 
 apt install mariadb-server
 apt install postfix postfix-mysql dovecot-imapd dovecot-pop3d dovecot-lmtpd dovecot-mysql
-apt install roundcube //自动安装apache2，php等额外模块
+
+apt install roundcube //自动安装apache2，php等额外模块 选择不配置数据库
 #apt install php
 #apt install apache2 //自动安装php
 #apt install mailutils
@@ -161,12 +162,12 @@ query = SELECT destination FROM virtual_aliases WHERE source='%s'
 postmap -q all@wower.cool mysql:/etc/postfix/mysql-virtual-alias-maps.cf
 ##########################################################################################################
 vi /etc/dovecot/dovecot.conf
-!include_try /usr/share/dovecot/protocols.d/*.protocol //默认配置
+!include_try /usr/share/dovecot/protocols.d/*.protocol //默认已配置
 protocols = imap pop3 lmtp //添加此行
 ###---------------------------------
 vi /etc/dovecot/conf.d/10-mail.conf
 mail_location = maildir:/var/mail/vhosts/%d/%n //修改此行
-mail_privileged_group = mail //默认配置
+mail_privileged_group = mail //默认已配置
 ###---------------------------------
 mkdir -p /var/mail/vhosts/wower.cool
 groupadd -g 5000 vmail
@@ -254,9 +255,15 @@ mysql -u roundcubeuser -p roundcubedb < /var/www/roundcube/SQL/mysql.initial.sql
 vi /etc/apache2/sites-available/default-ssl.conf
 vi /etc/apache2/sites-available/000-default.conf
 
+vi /etc/apache2/ports.conf
+#修改为8848 8443
+
+#配置000-default.conf，端口修改为8848，DocumentRoot /var/www/roundcube。apache2默认只启动http，并且同时监听IPv4和IPv6端口
+
 #配置 Apache https，启用SSL模块，修改配置文件
 a2enmod ssl
 systemctl restart apache2
+systemctl status apache2
 
 <IfModule mod_ssl.c>
   <VirtualHost _default_:443>

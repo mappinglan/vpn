@@ -11,8 +11,8 @@ GRUB_DEFAULT="Advanced options for Debian GNU/Linux>Debian GNU/Linux, with Linux
 update-grub
 reboot
 ###########################################################################################
-#抛弃过时的L2TP协议，手动配置IKEv2
-ifconfig ens4 mtu 1500
+#抛弃过时的L2TP协议，配置IKEv2
+#ifconfig ens4 mtu 1500
 apt install libreswan
 apt install wget dnsutils
 ipsec verify
@@ -49,7 +49,7 @@ conn ikev2-cp
   salifetime=24h
   authby=rsa-sha1
 ##########################################################################################
-#不需要配置
+#ikev2不需要此项配置
 vi /etc/ipsec.conf
 vi/etc/ipsec.secrets
 %any  %any  : PSK "vpn"
@@ -70,8 +70,6 @@ net.ipv4.conf.ens4.rp_filter = 0
 #net.ipv4.conf.default.send_redirects = 0
 #net.ipv4.conf.ens4.accept_redirects = 0
 #net.ipv4.conf.ens4.send_redirects = 0
-
-#net.ipv4.ip_no_pmtu_disc = 1
 
 sysctl -p
 

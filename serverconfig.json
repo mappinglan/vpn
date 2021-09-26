@@ -28,6 +28,10 @@
                         {
                             "certificateFile": "/etc/ssl/certs/ipv4.wower.cool.pem",
                             "keyFile": "/etc/ssl/private/ipv4.wower.cool.key"
+                        },
+                        {
+                            "certificateFile": "/etc/ssl/certs/wower.cool.pem",
+                            "keyFile": "/etc/ssl/private/wower.cool.key"
                         }
                     ]
                 }
@@ -72,6 +76,10 @@
                         {
                             "certificateFile": "/etc/ssl/certs/ipv4.wower.cool.pem",
                             "keyFile": "/etc/ssl/private/ipv4.wower.cool.key"
+                        },
+                        {
+                            "certificateFile": "/etc/ssl/certs/wower.cool.pem",
+                            "keyFile": "/etc/ssl/private/wower.cool.key"
                         }
                     ]
                 }
@@ -111,6 +119,10 @@
                         {
                             "certificateFile": "/etc/ssl/certs/ipv4.wower.cool.pem",
                             "keyFile": "/etc/ssl/private/ipv4.wower.cool.key"
+                        },
+                        {
+                            "certificateFile": "/etc/ssl/certs/wower.cool.pem",
+                            "keyFile": "/etc/ssl/private/wower.cool.key"
                         }
                     ]
                 }
@@ -151,6 +163,10 @@
                         {
                             "certificateFile": "/etc/ssl/certs/ipv4.wower.cool.pem",
                             "keyFile": "/etc/ssl/private/ipv4.wower.cool.key"
+                        },
+                        {
+                            "certificateFile": "/etc/ssl/certs/wower.cool.pem",
+                            "keyFile": "/etc/ssl/private/wower.cool.key"
                         }
                     ]
                 }

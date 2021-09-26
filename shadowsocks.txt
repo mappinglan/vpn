@@ -1,7 +1,8 @@
 #shadowsocks
 #https://github.com/shadowsocks
 
-apt install shadowsocks-libev shadowsocks-v2ray-plugin nginx
+apt install shadowsocks-libev shadowsocks-v2ray-plugin
+apt install nginx
 
 systemctl status shadowsocks-libev
 systemctl restart shadowsocks-libev
@@ -10,9 +11,11 @@ systemctl restart nginx
 systemctl status nginx
 systemctl stop nginx
 
-#lsof -i :8388 无法显示端口占用情况，取消动态用户
+#lsof -i :8388 无法显示端口占用情况，无权限读取证书，取消动态用户
 /lib/systemd/system/shadowsocks-libev.service
 DynamicUser=false
+
+systemctl daemon-reload
 
 vi /etc/shadowsocks-libev/config.json
 
@@ -43,6 +46,8 @@ scp ipv6.wower.cool.pem root@wower.cool:/etc/ssl/certs/ipv6.wower.cool.pem
 scp ipv6.wower.cool.key root@wower.cool:/etc/ssl/private/ipv6.wower.cool.key
 scp mail.wower.cool.pem root@wower.cool:/etc/ssl/certs/mail.wower.cool.pem
 scp mail.wower.cool.key root@wower.cool:/etc/ssl/private/mail.wower.cool.key
+scp git.wower.cool.pem root@wower.cool:/etc/ssl/certs/git.wower.cool.pem
+scp git.wower.cool.key root@wower.cool:/etc/ssl/private/git.wower.cool.key
 
 scp wower.cool.pem root@ipv4.wower.cool:/etc/ssl/certs/wower.cool.pem
 scp wower.cool.key root@ipv4.wower.cool:/etc/ssl/private/wower.cool.key
@@ -52,6 +57,8 @@ scp ipv6.wower.cool.pem root@ipv4.wower.cool:/etc/ssl/certs/ipv6.wower.cool.pem
 scp ipv6.wower.cool.key root@ipv4.wower.cool:/etc/ssl/private/ipv6.wower.cool.key
 scp mail.wower.cool.pem root@ipv4.wower.cool:/etc/ssl/certs/mail.wower.cool.pem
 scp mail.wower.cool.key root@ipv4.wower.cool:/etc/ssl/private/mail.wower.cool.key
+scp git.wower.cool.pem root@ipv4.wower.cool:/etc/ssl/certs/git.wower.cool.pem
+scp git.wower.cool.key root@ipv4.wower.cool:/etc/ssl/private/git.wower.cool.key
 
 vi /etc/nginx/nginx.conf
 #参见nginx.conf

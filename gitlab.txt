@@ -1,0 +1,19 @@
+#gitlab
+#https://docs.gitlab.com/
+
+apt-get update
+apt-get install -y curl openssh-server ca-certificates perl
+apt-get install -y postfix
+
+curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
+EXTERNAL_URL="https://git.wower.cool"
+apt-get install gitlab-ce
+
+#debian 11
+wget --content-disposition https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/buster/gitlab-ce_14.3.0-ce.0_amd64.deb/download.deb
+dpkg -i gitlab-ce_14.3.0-ce.0_amd64.deb
+
+vi /etc/gitlab/gitlab.rb
+external_url "http://git.wower.cool:8849"
+
+gitlab-ctl reconfigure
