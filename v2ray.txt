@@ -16,7 +16,7 @@ vi /etc/v2ray/config.json
 #Android ss with v2ray-plugin验证的是Hostname，websocket-http模式下Hostname可以为空
 
 #lsof -i :8000 无法显示端口占用情况，无权限读取证书，取消动态用户
-/lib/systemd/system/v2ray.service
+vi /lib/systemd/system/v2ray.service
 DynamicUser=false
 
 systemctl daemon-reload

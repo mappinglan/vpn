@@ -9,11 +9,21 @@ curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.de
 EXTERNAL_URL="https://git.wower.cool"
 apt-get install gitlab-ce
 
-#debian 11
+#debian 11 暂时未适配，可安装debian 10版
 wget --content-disposition https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/buster/gitlab-ce_14.3.0-ce.0_amd64.deb/download.deb
 dpkg -i gitlab-ce_14.3.0-ce.0_amd64.deb
 
-vi /etc/gitlab/gitlab.rb
-external_url "http://git.wower.cool:8849"
+#vi /etc/gitlab/gitlab.rb
+#external_url "http://git.wower.cool:8849"
+
+#反向代理配置
+external_url "https://git.wower.cool"
+nginx['listen_port'] = 8849
+nginx['listen_https'] = false
 
 gitlab-ctl reconfigure
+gitlab-ctl status
+gitlab-ctl restart
+
+netstat -lnpt
+lsof -i

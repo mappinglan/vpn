@@ -12,7 +12,7 @@ systemctl status nginx
 systemctl stop nginx
 
 #lsof -i :8388 无法显示端口占用情况，无权限读取证书，取消动态用户
-/lib/systemd/system/shadowsocks-libev.service
+vi /lib/systemd/system/shadowsocks-libev.service
 DynamicUser=false
 
 systemctl daemon-reload

@@ -100,7 +100,9 @@ iptables -t mangle -A FORWARD -m policy --pol ipsec --dir out -p tcp -m tcp --tc
 #解决Linux客户端strongswan, libreswan 可以连接但是没有流量的问题，上面两条
 
 iptables-save >> /etc/iptables.rules
+
 iptables -L
+iptables -t mangle -L FORWARD -v
 ###########################################
 #方案二
 vi /etc/iptables.rules
